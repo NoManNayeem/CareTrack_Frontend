@@ -6,17 +6,18 @@ Admin web client for **CareTrack (Doctor Tracker)**, built with Next.js 16, Reac
 |---|---|
 | **Frontend repo** (this) | https://github.com/NoManNayeem/CareTrack_Frontend |
 | **Backend repo** | https://github.com/NoManNayeem/CareTrack_Backend |
-| **Live app** | _added after deployment_ |
+| **Live app** | https://caretrackfrontend.vercel.app |
+| **Live API** | https://caretrackbackend.vercel.app/api/v1/health |
 | **Demo credentials** | `admin@caretrack.dev` / `CareTrack@2026` (also a one-click button on the sign-in page) |
 
 ### Project walkthrough video
 
-<!-- Replace VIDEO_URL with the link to the walkthrough video (YouTube, Loom, Google Drive…). -->
-<a href="VIDEO_URL">
+<!-- Walkthrough video -->
+<a href="https://youtu.be/_p9CORnn2bA">
   <img src="docs/video-thumbnail.png" alt="Watch the CareTrack walkthrough video (about 5 minutes)" width="100%" />
 </a>
 
-▶ **[Watch the walkthrough (~5 min)](VIDEO_URL)**: a product tour of CareTrack, what it does and how the frontend and backend work together.
+▶ **[Watch the walkthrough (~5 min)](https://youtu.be/_p9CORnn2bA)**: a product tour of CareTrack, what it does and how the frontend and backend work together.
 
 ---
 
@@ -354,7 +355,7 @@ flowchart LR
 ```
 
 - **e2e** starts the real API and MongoDB from the backend repository, then runs the browser tests against the container built from this repo.
-- **Deploys** run only when quality and e2e pass. `vercel.json` turns off Vercel's own Git deployments, so nothing ships without CI.
+- **Hosting:** Vercel's Git integration builds and deploys every push to `main` (production) and every pull request (preview). The workflow's `deploy` job is an optional alternative that deploys only after quality and e2e pass. It turns on when the Vercel secrets are added; if you use it, disable Git deployments in the Vercel project.
 - **No secrets in the repository.**
   - Vercel credentials are GitHub Actions secrets, used only in the deploy job and masked in logs.
   - `API_URL` is set in Vercel's project settings.
