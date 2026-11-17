@@ -1,26 +1,270 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:is(.dark *));
+
+/* ──────────────────────────────────────────────────────────────────────────
+   CareTrack design tokens — "Clinical Precision"
+   Warm-neutral greys, a single deep-teal accent, and a reserved set of
+   condition colours (validated for CVD separation in light AND dark).
+   ────────────────────────────────────────────────────────────────────────── */
 
 @theme inline {
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-heading: var(--font-sans);
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-subtle-foreground: var(--subtle-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  --color-brand: var(--brand);
+  --color-brand-soft: var(--brand-soft);
+  --color-brand-ink: var(--brand-ink);
+  --color-success: var(--success);
+  --color-danger: var(--danger);
+
+  /* Patient condition (status) colours — always paired with a text label */
+  --color-condition-critical: var(--condition-critical);
+  --color-condition-under_observation: var(--condition-under_observation);
+  --color-condition-recovering: var(--condition-recovering);
+  --color-condition-stable: var(--condition-stable);
+  --color-condition-discharged: var(--condition-discharged);
+
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-chart-grid: var(--chart-grid);
+  --color-chart-axis: var(--chart-axis);
+
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+
+  /* Motion — one easing curve for the whole product */
+  --ease-snappy: cubic-bezier(0.2, 0, 0, 1);
+  --ease-exit: cubic-bezier(0.4, 0, 1, 1);
+
+  --shadow-hairline: 0 1px 0 0 var(--hairline-shadow);
+  --shadow-overlay:
+    0 0 0 1px var(--overlay-ring), 0 4px 8px -2px rgb(28 25 23 / 0.08), 0 16px 32px -8px rgb(28 25 23 / 0.14);
+
+  --animate-shimmer: shimmer 1.6s var(--ease-snappy) infinite;
+  @keyframes shimmer {
+    from {
+      background-position: 150% 0;
+    }
+    to {
+      background-position: -50% 0;
+    }
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+:root {
+  --radius: 0.5rem;
+
+  /* Surfaces: page plane (sidebar) → raised content panel → overlays */
+  --background: oklch(0.975 0.0025 78);
+  --card: #fdfdfc;
+  --popover: #ffffff;
+  --foreground: oklch(0.205 0.006 56);
+  --card-foreground: var(--foreground);
+  --popover-foreground: var(--foreground);
+
+  --muted: oklch(0.962 0.003 78);
+  --muted-foreground: oklch(0.49 0.008 70);
+  --subtle-foreground: oklch(0.545 0.007 72);
+  --secondary: oklch(0.955 0.0035 78);
+  --secondary-foreground: var(--foreground);
+  --accent: oklch(0.95 0.004 78);
+  --accent-foreground: var(--foreground);
+
+  --border: oklch(0.918 0.004 78);
+  --border-strong: oklch(0.86 0.005 76);
+  --input: oklch(0.885 0.005 76);
+  --overlay-ring: rgb(28 25 23 / 0.09);
+
+  --brand: #0f766e;
+  --brand-ink: #0b5f58;
+  --brand-soft: oklch(0.955 0.022 184);
+  --primary: var(--brand);
+  --primary-foreground: #ffffff;
+  --ring: color-mix(in oklch, var(--brand) 55%, transparent);
+
+  --destructive: #c4302f;
+  --danger: #c4302f;
+  --success: #006300;
+
+  --condition-critical: #d03b3b;
+  --condition-under_observation: #e8a312;
+  --condition-recovering: #2a78d6;
+  --condition-stable: #0ca30c;
+  --condition-discharged: #6250d6;
+
+  --chart-1: var(--brand);
+  --chart-2: #b9b7ae; /* de-emphasis series (previous period, sparklines) */
+  --chart-3: #2a78d6;
+  --chart-4: #d03b3b;
+  --chart-5: #6250d6;
+  --chart-grid: #ebe9e3;
+  --chart-axis: #6f6d66; /* 5.1:1 on the card surface (WCAG AA for 12px text) */
+  --hairline-shadow: rgb(28 25 23 / 0.04);
+
+  --sidebar: var(--background);
+  --sidebar-foreground: oklch(0.36 0.007 60);
+  --sidebar-primary: var(--brand);
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: oklch(0.935 0.004 78);
+  --sidebar-accent-foreground: var(--foreground);
+  --sidebar-border: var(--border);
+  --sidebar-ring: var(--ring);
+}
+
+.dark {
+  --background: #111110;
+  --card: #1a1a19;
+  --popover: #1f1f1e;
+  --foreground: #f0efec;
+  --card-foreground: var(--foreground);
+  --popover-foreground: var(--foreground);
+
+  --muted: #232322;
+  --muted-foreground: #a8a69f;
+  --subtle-foreground: #8f8d86;
+  --secondary: #262625;
+  --secondary-foreground: var(--foreground);
+  --accent: #262625;
+  --accent-foreground: var(--foreground);
+
+  --border: rgb(255 255 255 / 0.085);
+  --border-strong: rgb(255 255 255 / 0.14);
+  --input: rgb(255 255 255 / 0.13);
+  --overlay-ring: rgb(255 255 255 / 0.1);
+
+  --brand: #2bb3a3;
+  --brand-ink: #5fd0c2;
+  --brand-soft: rgb(43 179 163 / 0.12);
+  --primary: var(--brand);
+  --primary-foreground: #04201d;
+  --ring: color-mix(in oklch, var(--brand) 55%, transparent);
+
+  --destructive: #e5605f;
+  --danger: #e5605f;
+  --success: #3cbf3c;
+
+  --condition-critical: #cf3f4f;
+  --condition-under_observation: #c98500;
+  --condition-recovering: #3987e5;
+  --condition-stable: #1fb01f;
+  --condition-discharged: #9085e9;
+
+  --chart-1: var(--brand);
+  --chart-2: #4d4c48;
+  --chart-3: #3987e5;
+  --chart-4: #cf3f4f;
+  --chart-5: #9085e9;
+  --chart-grid: #2a2a28;
+  --chart-axis: #9a988f;
+  --hairline-shadow: rgb(0 0 0 / 0.2);
+
+  --sidebar: var(--background);
+  --sidebar-foreground: #c9c7c0;
+  --sidebar-primary: var(--brand);
+  --sidebar-primary-foreground: #04201d;
+  --sidebar-accent: #1f1f1e;
+  --sidebar-accent-foreground: var(--foreground);
+  --sidebar-border: var(--border);
+  --sidebar-ring: var(--ring);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    @apply font-sans;
+    text-rendering: optimizeLegibility;
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "ss01", "cv11";
+  }
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+  ::selection {
+    background: color-mix(in oklch, var(--brand) 22%, transparent);
+  }
+  :focus-visible {
+    outline-offset: 2px;
+  }
+}
+
+@layer utilities {
+  /* Aligned numeric columns (tables, axes) */
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+  /* Shimmer skeleton — quieter than a pulse */
+  .skeleton-shimmer {
+    background: linear-gradient(
+      90deg,
+      var(--muted) 0%,
+      color-mix(in oklch, var(--muted), var(--foreground) 4%) 50%,
+      var(--muted) 100%
+    );
+    background-size: 200% 100%;
+    animation: var(--animate-shimmer);
+  }
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-strong) transparent;
+  }
+}
+
+/* Respect the OS setting everywhere — CSS transitions/animations collapse to instant. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
