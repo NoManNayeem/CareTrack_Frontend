@@ -106,7 +106,7 @@ NEXT_PUBLIC_DEMO_PASSWORD=CareTrack@2026
 
 | Variable | Purpose |
 |---|---|
-| `API_URL` | Where the API lives. **Server-side only**: it's the target of the `/api/*` rewrite and never reaches the browser. In Docker it's a build argument (default `http://api:4000`). |
+| `API_URL` | Where the API lives. **Server-side only**: it's the target of the `/api/*` rewrite and never reaches the browser. Defaults to `https://caretrackbackend.vercel.app` on Vercel and `http://localhost:4000` locally; in Docker it's a build argument (default `http://api:4000`). |
 | `SESSION_COOKIE_NAME` | Must match the API's `COOKIE_NAME`. |
 | `NEXT_PUBLIC_DEMO_*` | Shows a "Use demo credentials" button on the sign-in page. These are public demo values, not secrets. Set `NEXT_PUBLIC_DEMO_MODE=false` to hide it. |
 

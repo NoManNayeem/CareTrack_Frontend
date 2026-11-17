@@ -5,7 +5,9 @@ import type { NextConfig } from "next";
  * standalone Express API, so the HTTP-only session cookie stays first-party
  * (no third-party-cookie blocking, no CORS preflights). See README → Technical decisions.
  */
-const API_URL = (process.env.API_URL ?? "http://localhost:4000").replace(/\/$/, "");
+const API_URL = (
+  process.env.API_URL ?? (process.env.VERCEL ? "https://caretrackbackend.vercel.app" : "http://localhost:4000")
+).replace(/\/$/, "");
 
 const securityHeaders = [
   { key: "X-Content-Type-Options", value: "nosniff" },
